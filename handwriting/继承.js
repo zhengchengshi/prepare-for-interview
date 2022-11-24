@@ -91,7 +91,7 @@ function inheritPrototype(subType, superType) {
   subType.prototype = prototype;
 }
 inheritPrototype(subType4, superType);
-// subType4.prototype = superType.prototype;
+// subType4.prototype = superType.prototype; // 直接把父类原型盖上去的话 所继承的父类函数的原型键会丢 使用instanceof就查不到了 所以要单独再包一层
 const obj6 = new subType4();
 console.dir(obj6);
 obj6.sayAge();
