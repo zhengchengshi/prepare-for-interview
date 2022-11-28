@@ -19,27 +19,31 @@
  * @param {number[][]} intervals
  * @return {number[][]}
  */
-var merge = function(intervals) {
-    let flag = intervals.length - 1;
-    let ansArr = [];
-    let mark = true
-    while(flag>0){
-        intervals[flag].map((item,index)=>{
-            if(item<intervals[flag-1][1]&&item>intervals[flag-1][0]){
-                mark = false;
-                if(index===1){
-                    ansArr.push([intervals[flag-1][0].intervals[flag][1]])
-                }
-                else{
-                    ansArr.push([intervals[flag][0].intervals[flag-1][1]])
-                }
-            }
-        })
-        if(mark){
-            ansArr.push(intervals[flag])
+var merge = function (intervals) {
+  let flag = intervals.length - 1;
+  let ansArr = [];
+  let mark = true;
+  while (flag > 0) {
+    intervals[flag].map((item, index) => {
+      if (item < intervals[flag - 1][1] && item > intervals[flag - 1][0]) {
+        mark = false;
+        if (index === 1) {
+          ansArr.push([intervals[flag - 1][0].intervals[flag][1]]);
+        } else {
+          ansArr.push([intervals[flag][0].intervals[flag - 1][1]]);
         }
-        flag--;
+      }
+    });
+    if (mark) {
+      ansArr.push(intervals[flag]);
     }
-    console.log(ansArr)
+    flag--;
+  }
+  console.log(ansArr);
 };
-merge([[1,3],[2,6],[8,10],[15,18]])
+merge([
+  [1, 3],
+  [2, 6],
+  [8, 10],
+  [15, 18],
+]);
