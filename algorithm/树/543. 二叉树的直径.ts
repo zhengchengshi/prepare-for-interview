@@ -31,11 +31,11 @@ function getMaxLength(root: TreeNode): number {
   if (root === null) return 0;
   const leftDepth = getMaxLength(root.left!);
   const rightDepth = getMaxLength(root.right!);
-  ans = Math.max(res, leftDepth + rightDepth + 1);
+  ans = Math.max(ans, leftDepth + rightDepth + 1);
   return Math.max(leftDepth, rightDepth) + 1;
 }
 function diameterOfBinaryTree(root: TreeNode | null): number {
   ans = 1;
   getMaxLength(root as TreeNode);
-  return res - 1;
+  return ans - 1;
 }
