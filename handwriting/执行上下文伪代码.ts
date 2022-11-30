@@ -1,10 +1,12 @@
-// 变量声明提升，作用域，作用域链和闭包都可用执行环境伪码解释
+// 执行上下文的伪码非常重要
+// 变量提升，暂时性死区，（静态）作用域，作用域链，闭包等都可用执行环境伪码解释
 // 执行上下文创建阶段会做三个事情 1. this绑定  2. 创建词法环境组件 3. 创建变量环境组件
 // 词法环境
 const ExecutionContext = {
   ThisBinding: "<this value>",
   LexicalEnvironment: {
     environmentRecord: {
+      // Type决定了记录器的类型，全局执行环境下Type为Object，函数执行环境下为Declarative
       Type: "Object | Declarative",
       params: "...",
       // ...
