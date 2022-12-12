@@ -6,6 +6,7 @@ interface Obj {
     position: string;
   };
 }
+// @ts-ignore
 const obj = {
   name: "Lucy",
   age: 18,
