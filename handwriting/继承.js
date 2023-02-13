@@ -25,15 +25,14 @@ console.log(obj1.arr, obj2.arr); // [1,2,3] [1,2,3]
  */
 // 盗用构造函数的优点是可以传参，
 // 缺点在于:
-// 1. 重复逻辑的函数会被重复创建，从而造成资源浪费
-// 2. 原型链上属性没法获取
+// 原型链上属性没法获取
 function subType2(name) {
   superType.call(this, name);
 }
 const obj3 = new subType2("mike");
 const obj4 = new subType2();
 console.log(obj3.name); // mike
-console.log(obj3.sayAge === obj4.sayAge); // false 重复逻辑的函数在不同的示例上不同
+console.log(obj3.sayAge); // undefined
 
 /**
  * 组合继承 原型链 + 盗用构造函数

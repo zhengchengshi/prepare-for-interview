@@ -18,18 +18,40 @@ function performUnitOfWork(fiber) {
 // shouldYield会中止循环，直到浏览器有空闲时间后再继续遍历
 function workLoopSync() {
   while (workInProgress !== null) {
-    performUnitOfWork(workInProgress);
+    nextUnitOfWork = performUnitOfWork(workInProgress);
   }
 }
 function workLoopConcurrent() {
   // Perform work until Scheduler asks us to yield
-  while (workInProgress !== null && shouldYield()) {
-    performUnitOfWork(workInProgress);
+  while (workInProgress !== null && shouldYieldToRenderer()) {
+    nextUnitOfWork = performUnitOfWork(workInProgress);
   }
 }
+
 // performUnitOfWork实现两个需求
-// 1、创建下一个Fiber节点并赋值给workInProgress(下一轮循环中会使用，直到workInProgress为null)
+// 1、创建下一个Fiber节点（用next接受beginWork的返回结果）并赋值给workInProgress(下一轮循环中会使用，直到workInProgress为null)
 // 2、将workInProgress与已创建的Fiber节点连接起来构成Fiber树
+function performUnitOfWork(unitOfWork) {
+  const current = unitOfWork.alternate;
+  let next = void 0; // 用来存放beginWork()返回的结果
+  // beginWork递
+  if (enableProfilerTimer && (unitOfWork.mode & ProfileMode) !== NoMode) {
+    // ...省略
+    next = beginWork(current, unitOfWork, subtreeRenderLanes);
+    // ...省略
+  } else {
+    next = beginWork(current, unitOfWork, subtreeRenderLanes);
+  }
+  unitOfWork.memoizedProps = unitOfWork.pendingProps; // 存储props，用于completeWork比较props
+  if (next === null) {
+    // beginWork返回null，表示无（或无需关注）当前节点的子Fiber节点
+    // completeWork归或递给兄弟节点
+    completeUnitOfWork(unitOfWork);
+  } else {
+    workInProgress = next; // 下次的workLoopSync/workLoopConcurrent的while循环的循环主体为子Fiber节点
+  }
+  return next;
+}
 
 // Fiber Reconciler是从Stack Reconciler重构而来，通过遍历的方式实现可中断的递归
 // 所以performUnitOfWork的工作可以分为两部分：“递”和“归”。
